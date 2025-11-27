@@ -504,7 +504,7 @@ export default function ThemeToggle() {
               phase === "expanding"
                 ? "#ffffff"
                 : transitioningToDark
-                ? "#0a0a0a"
+                ? "#1C1C1C"
                 : "#ffffff",
             mixBlendMode: phase === "expanding" ? "difference" : "normal",
             transition: phase === "fading" ? "opacity 0.3s ease-out" : "none",
