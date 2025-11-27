@@ -12,6 +12,7 @@ export default function ThemeToggle() {
   const { isRippling, rippleOrigin, rippleRadius, waveProgress, maxRadius } =
     rippleState;
   const transitioningToDark = rippleState.transitioningToDark ?? false;
+  const phase = rippleState.phase ?? "expanding"; // 'expanding' | 'solid' | 'fading'
   const buttonRef = useRef(null);
   const circleRef = useRef(null);
   const bodyRef = useRef(null);
@@ -87,9 +88,6 @@ export default function ThemeToggle() {
     // Also disable transitions on all elements using a global class
     htmlRef.current.classList.add("no-transitions");
 
-    // Track if theme has been changed (will happen at ~90% progress)
-    let themeChanged = false;
-
     setRippleState({
       isRippling: true,
       rippleOrigin: { x: circleCenterX, y: circleCenterY },
@@ -98,11 +96,12 @@ export default function ThemeToggle() {
       maxRadius: maxRadius,
       minStartRadius: minStartRadius,
       transitioningToDark: transitioningToDark,
+      phase: "expanding", // Phase 1: Expanding with inverted colors
     });
 
     // Start theme transition animation
     const startTime = Date.now();
-    const duration = 1200; // 1.2 seconds - slower for better visibility
+    const duration = 800; // Slightly faster expansion
 
     const animateThemeTransition = () => {
       const elapsed = Date.now() - startTime;
@@ -112,12 +111,6 @@ export default function ThemeToggle() {
       const eased = 1 - Math.pow(1 - progress, 3);
       const currentRadius = eased * maxRadius;
 
-      // Change theme when overlay covers ~90% of the screen
-      if (progress >= 0.9 && !themeChanged) {
-        themeChanged = true;
-        setTheme(newTheme);
-      }
-
       setRippleState({
         isRippling: true,
         rippleOrigin: { x: circleCenterX, y: circleCenterY },
@@ -126,40 +119,56 @@ export default function ThemeToggle() {
         maxRadius: maxRadius,
         minStartRadius: minStartRadius,
         transitioningToDark: transitioningToDark,
+        phase: "expanding",
       });
 
       if (progress < 1) {
         requestAnimationFrame(animateThemeTransition);
       } else {
-        // Animation complete - overlay fully covers screen
-        // Theme was already changed at 90% progress, now wait for it to settle
-        // Then fade out overlay smoothly to reveal the new theme
-        setTimeout(() => {
-          // Wait for theme to fully settle (DOM updates, repaints)
-          // Then trigger fade-out by updating waveProgress to signal completion
-          setRippleState({
-            isRippling: true,
-            rippleOrigin: { x: circleCenterX, y: circleCenterY },
-            rippleRadius: maxRadius * 1.1,
-            waveProgress: 1.1, // Signal that fade-out should begin
-            maxRadius: maxRadius,
-            minStartRadius: minStartRadius,
-            transitioningToDark: transitioningToDark,
-          });
+        // Phase 2: Expansion complete - switch to solid overlay before changing theme
+        // This prevents the visual flash caused by theme change + inversion
+        setRippleState({
+          isRippling: true,
+          rippleOrigin: { x: circleCenterX, y: circleCenterY },
+          rippleRadius: maxRadius * 1.1,
+          waveProgress: 1,
+          maxRadius: maxRadius,
+          minStartRadius: minStartRadius,
+          transitioningToDark: transitioningToDark,
+          phase: "solid", // Switch to solid overlay (no blend mode)
+        });
 
-          // Wait for fade-out animation (300ms) to complete before restoring transitions
+        // Small delay to ensure solid overlay is rendered
+        requestAnimationFrame(() => {
+          // Now safely change the theme under the solid overlay
+          setTheme(newTheme);
+
+          // Wait for theme to settle, then start fade out
           setTimeout(() => {
-            // Restore transitions after overlay is completely gone
-            if (htmlRef.current) {
-              htmlRef.current.style.transition = originalHtmlTransition;
-              htmlRef.current.classList.remove("no-transitions");
-            }
-            if (bodyRef.current) {
-              bodyRef.current.style.transition = originalBodyTransition;
-            }
+            // Phase 3: Fade out the solid overlay
+            setRippleState({
+              isRippling: true,
+              rippleOrigin: { x: circleCenterX, y: circleCenterY },
+              rippleRadius: maxRadius * 1.1,
+              waveProgress: 1,
+              maxRadius: maxRadius,
+              minStartRadius: minStartRadius,
+              transitioningToDark: transitioningToDark,
+              phase: "fading", // Start fade out
+            });
 
-            // Clean up ripple state after transitions are restored
+            // Wait for fade-out animation to complete
             setTimeout(() => {
+              // Restore transitions after overlay is completely gone
+              if (htmlRef.current) {
+                htmlRef.current.style.transition = originalHtmlTransition;
+                htmlRef.current.classList.remove("no-transitions");
+              }
+              if (bodyRef.current) {
+                bodyRef.current.style.transition = originalBodyTransition;
+              }
+
+              // Clean up ripple state
               setRippleState({
                 isRippling: false,
                 rippleOrigin: { x: 0, y: 0 },
@@ -168,10 +177,11 @@ export default function ThemeToggle() {
                 maxRadius: 0,
                 minStartRadius: 0,
                 transitioningToDark: false,
+                phase: "expanding",
               });
-            }, 50); // Small delay to ensure transitions are restored
-          }, 350); // Wait for fade-out animation (300ms) + small buffer
-        }, 100); // Wait for theme to settle after change
+            }, 350); // Wait for fade-out animation (300ms) + buffer
+          }, 50); // Brief delay for theme to settle
+        });
       }
     };
 
@@ -485,25 +495,21 @@ export default function ThemeToggle() {
           className="fixed inset-0 pointer-events-none"
           style={{
             zIndex: 9999, // Above everything
-            clipPath:
-              waveProgress >= 1
-                ? `circle(${maxRadius * 1.1}px at ${rippleOrigin.x}px ${
-                    rippleOrigin.y
-                  }px)`
-                : `circle(${rippleRadius}px at ${rippleOrigin.x}px ${rippleOrigin.y}px)`,
-            // White overlay with difference blend mode inverts all colors:
-            // - Light bg becomes dark, dark text becomes light
-            // - Dark bg becomes light, light text becomes dark
-            // This keeps all content visible with inverted colors during transition
-            backgroundColor: "#ffffff",
-            mixBlendMode: "difference",
-            transition:
-              waveProgress >= 1
-                ? "opacity 0.3s ease-out"
-                : "clip-path 0.016s cubic-bezier(0.4, 0, 0.2, 1)",
-            willChange: waveProgress >= 1 ? "opacity" : "clip-path",
-            // Keep fully opaque until animation completes, then fade out
-            opacity: waveProgress >= 1 ? 0 : 1,
+            clipPath: `circle(${rippleRadius}px at ${rippleOrigin.x}px ${rippleOrigin.y}px)`,
+            // Phase-based styling:
+            // - 'expanding': White with difference blend mode (inverts colors, shows preview of new theme)
+            // - 'solid': Solid color matching new theme (covers screen before theme change)
+            // - 'fading': Same solid color, fading out to reveal new theme
+            backgroundColor:
+              phase === "expanding"
+                ? "#ffffff"
+                : transitioningToDark
+                ? "#0a0a0a"
+                : "#ffffff",
+            mixBlendMode: phase === "expanding" ? "difference" : "normal",
+            transition: phase === "fading" ? "opacity 0.3s ease-out" : "none",
+            willChange: phase === "fading" ? "opacity" : "clip-path",
+            opacity: phase === "fading" ? 0 : 1,
           }}
         />
       )}
