@@ -87,8 +87,8 @@ export default function ThemeToggle() {
     // Also disable transitions on all elements using a global class
     htmlRef.current.classList.add("no-transitions");
 
-    // Apply theme change immediately (for DOM structure) but visual transition happens via overlay
-    setTheme(newTheme);
+    // Track if theme has been changed (will happen at ~90% progress)
+    let themeChanged = false;
 
     setRippleState({
       isRippling: true,
@@ -112,6 +112,12 @@ export default function ThemeToggle() {
       const eased = 1 - Math.pow(1 - progress, 3);
       const currentRadius = eased * maxRadius;
 
+      // Change theme when overlay covers ~90% of the screen
+      if (progress >= 0.9 && !themeChanged) {
+        themeChanged = true;
+        setTheme(newTheme);
+      }
+
       setRippleState({
         isRippling: true,
         rippleOrigin: { x: circleCenterX, y: circleCenterY },
@@ -126,11 +132,22 @@ export default function ThemeToggle() {
         requestAnimationFrame(animateThemeTransition);
       } else {
         // Animation complete - overlay fully covers screen
-        // Keep overlay fully opaque for a brief moment to ensure smooth transition
-        // Then fade out overlay smoothly
+        // Theme was already changed at 90% progress, now wait for it to settle
+        // Then fade out overlay smoothly to reveal the new theme
         setTimeout(() => {
-          // Start fade-out (overlay opacity will transition to 0)
-          // Wait for fade-out to complete (200ms) before restoring transitions
+          // Wait for theme to fully settle (DOM updates, repaints)
+          // Then trigger fade-out by updating waveProgress to signal completion
+          setRippleState({
+            isRippling: true,
+            rippleOrigin: { x: circleCenterX, y: circleCenterY },
+            rippleRadius: maxRadius * 1.1,
+            waveProgress: 1.1, // Signal that fade-out should begin
+            maxRadius: maxRadius,
+            minStartRadius: minStartRadius,
+            transitioningToDark: transitioningToDark,
+          });
+
+          // Wait for fade-out animation (300ms) to complete before restoring transitions
           setTimeout(() => {
             // Restore transitions after overlay is completely gone
             if (htmlRef.current) {
@@ -153,8 +170,8 @@ export default function ThemeToggle() {
                 transitioningToDark: false,
               });
             }, 50); // Small delay to ensure transitions are restored
-          }, 250); // Wait for fade-out animation (200ms) + small buffer
-        }, 50); // Brief delay to ensure overlay is fully visible
+          }, 350); // Wait for fade-out animation (300ms) + small buffer
+        }, 100); // Wait for theme to settle after change
       }
     };
 
@@ -462,7 +479,7 @@ export default function ThemeToggle() {
         </motion.div>
       </motion.button>
 
-      {/* Theme Transition Effect - Smooth ripple reveal */}
+      {/* Theme Transition Effect - Smooth ripple reveal with inverted colors */}
       {isRippling && (
         <div
           className="fixed inset-0 pointer-events-none"
@@ -474,13 +491,17 @@ export default function ThemeToggle() {
                     rippleOrigin.y
                   }px)`
                 : `circle(${rippleRadius}px at ${rippleOrigin.x}px ${rippleOrigin.y}px)`,
-            backgroundColor: transitioningToDark ? "#0a0a0a" : "#ffffff",
+            // White overlay with difference blend mode inverts all colors:
+            // - Light bg becomes dark, dark text becomes light
+            // - Dark bg becomes light, light text becomes dark
+            // This keeps all content visible with inverted colors during transition
+            backgroundColor: "#ffffff",
+            mixBlendMode: "difference",
             transition:
               waveProgress >= 1
-                ? "opacity 0.2s ease-out"
+                ? "opacity 0.3s ease-out"
                 : "clip-path 0.016s cubic-bezier(0.4, 0, 0.2, 1)",
             willChange: waveProgress >= 1 ? "opacity" : "clip-path",
-            mixBlendMode: "difference", // Inverts colors - keeps content visible while changing theme
             // Keep fully opaque until animation completes, then fade out
             opacity: waveProgress >= 1 ? 0 : 1,
           }}
