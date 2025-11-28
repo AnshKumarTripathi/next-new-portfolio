@@ -15,14 +15,14 @@
 
 [data-theme="dark"] {
   --background: #1C1C1C;        /* Deep charcoal */
-  --foreground: #FFB000;        /* Warm amber */
+  --foreground: #F5F5F5;        /* Light gray for main text */
   --muted: #2A2A2A;             /* Darker charcoal */
-  --muted-foreground: #CC8F00;  /* Dimmer amber */
+  --muted-foreground: #A0A0A0;  /* Medium gray for secondary text */
   --border: #3A3A3A;            /* Subtle dark gray */
-  --accent: #FFD700;            /* Bright gold */
+  --accent: #FFD700;            /* Bright gold - keep for highlights */
   --accent-foreground: #1C1C1C;
   --card: #2A2A2A;
-  --card-foreground: #FFB000;
+  --card-foreground: #F5F5F5;   /* Light gray for card text */
 }
 
 @theme {

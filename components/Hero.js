@@ -1,67 +1,54 @@
-"use client";
+// components/Hero.js
+import Link from "next/link";
 
-import { Github, Linkedin, Mail } from "lucide-react";
-import { motion } from "framer-motion";
+const socials = [
+  { label: "GitHub", href: "https://github.com/your-handle" },
+  { label: "LinkedIn", href: "https://linkedin.com/in/your-handle" },
+  { label: "X / Twitter", href: "https://twitter.com/your-handle" },
+];
 
 export default function Hero() {
-  const socialLinks = [
-    {
-      name: "GitHub",
-      icon: Github,
-      href: "https://github.com",
-      ariaLabel: "Visit GitHub profile",
-    },
-    {
-      name: "LinkedIn",
-      icon: Linkedin,
-      href: "https://linkedin.com",
-      ariaLabel: "Visit LinkedIn profile",
-    },
-    {
-      name: "Email",
-      icon: Mail,
-      href: "mailto:your.email@example.com",
-      ariaLabel: "Send email",
-    },
-  ];
-
   return (
-    <section className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-16">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-center"
-      >
-        <h1 className="mb-4 text-4xl font-bold text-foreground md:text-5xl lg:text-6xl">
-          Your Name
-        </h1>
-        <p className="mb-8 text-xl text-muted-foreground md:text-2xl lg:text-3xl">
-          Software Engineer
-        </p>
+    <section
+      id="hero"
+      style={{
+        paddingTop: "1rem",
+        paddingBottom: "1rem",
+      }}
+      className="w-full max-w-5xl mx-auto mt-32 flex flex-col items-center gap-10 rounded-lg border border-border/50 bg-card px-6 md:px-12 shadow-lg"
+    >
+      <div className="text-sm uppercase tracking-[0.35em] text-muted-foreground text-center">
+        Software Engineer
+      </div>
 
-        {/* Social Links */}
-        <div className="flex items-center justify-center gap-6">
-          {socialLinks.map((link) => {
-            const Icon = link.icon;
-            return (
-              <motion.a
-                key={link.name}
-                href={link.href}
-                target={link.href.startsWith("mailto:") ? undefined : "_blank"}
-                rel={link.href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                aria-label={link.ariaLabel}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="rounded-full p-3 text-muted-foreground transition-colors hover:text-accent hover:bg-accent/10"
-              >
-                <Icon className="h-6 w-6 md:h-7 md:w-7" />
-              </motion.a>
-            );
-          })}
-        </div>
-      </motion.div>
+      <h1 className="text-center text-4xl md:text-5xl lg:text-6xl font-semibold text-foreground leading-snug max-w-4xl">
+        Hi, I’m <span className="text-accent">Your Name</span>.
+        <br />I build delightful web experiences.
+      </h1>
+
+      <p
+        style={{ maxWidth: "42rem", margin: "0 auto" }}
+        className="w-full text-center text-base md:text-lg text-muted-foreground leading-relaxed px-4"
+      >
+        “Replace this line with your motto.” Explain briefly what you do, what
+        you care about, or the kind of problems you solve. Keep it to 2–3
+        sentences so it feels like a concise elevator pitch.
+      </p>
+
+      <div className="flex flex-wrap items-center justify-center gap-4 w-full">
+        {socials.map(({ label, href }) => (
+          <Link
+            key={label}
+            href={href}
+            target="_blank"
+            rel="noreferrer"
+            style={{ paddingLeft: "1.5rem", paddingRight: "1.5rem" }}
+            className="inline-flex items-center justify-center h-8 rounded-lg border border-border/70 text-sm font-medium text-foreground hover:bg-foreground/5 transition-colors whitespace-nowrap"
+          >
+            {label}
+          </Link>
+        ))}
+      </div>
     </section>
   );
 }
-
