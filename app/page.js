@@ -13,7 +13,7 @@ const featuredProjects = [
     technologies: "TypeScript, HTML, CSS, JavaScript, React",
     demo: "https://www.resume-builder.space/",
     youtube: "https://youtu.be/2SzDcSlD3Cg",
-    imageUrl: "/images/resume-space.png",
+    imageUrl: "/Images/resume-space.png",
   },
   {
     name: "DocuSplit",
@@ -21,7 +21,7 @@ const featuredProjects = [
     technologies: "Python, Streamlit, PDF Processing, File Automation",
     demo: "https://doc2pdfsplitter.streamlit.app/",
     youtube: "https://youtu.be/lKcZ3MCwqUc",
-    imageUrl: "/images/docu-split.png",
+    imageUrl: "/Images/docu-split.png",
   },
   {
     name: "Intel Global Impact Fest Project",
@@ -34,7 +34,7 @@ const featuredProjects = [
     github:
       "https://github.com/AnshKumarTripathi/Unity-internship-intel-project",
     youtube: "https://youtu.be/1Ib96i8-1AY",
-    imageUrl: "/images/intel-global-impact.png",
+    imageUrl: "/Images/intel-global-impact.png",
   },
 ];
 

@@ -157,14 +157,14 @@ export default function Hero() {
             {label}
           </Link>
         ))}
-        <Link
-          href="/Ansh Kumar Tripathi - Resume.pdf"
+        <a
+          href="/Ansh%20Kumar%20Tripathi%20-%20Resume.pdf"
           download="Ansh Kumar Tripathi - Resume.pdf"
           style={{ paddingLeft: "1.5rem", paddingRight: "1.5rem" }}
-          className="inline-flex items-center justify-center h-8 rounded-lg border border-border/70 text-sm font-medium text-foreground hover:bg-foreground/5 transition-colors whitespace-nowrap"
+          className="inline-flex items-center justify-center h-8 rounded-lg border border-border/70 text-sm font-medium text-foreground hover:bg-foreground/5 transition-colors whitespace-nowrap no-underline"
         >
           Download Resume
-        </Link>
+        </a>
       </div>
     </section>
   );
