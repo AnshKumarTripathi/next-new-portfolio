@@ -37,9 +37,10 @@ export default function Hero() {
         }}
       >
         <div
-          className="rounded-lg border border-border/50 bg-muted shadow-md"
+          className="rounded-lg border border-border/50 shadow-md"
           style={{
             padding: "1rem",
+            backgroundColor: "var(--background)",
           }}
         >
           <div
