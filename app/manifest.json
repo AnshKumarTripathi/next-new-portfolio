@@ -1,0 +1,25 @@
+{
+  "name": "Ansh Kumar Tripathi - Software Engineer Portfolio",
+  "short_name": "Ansh Kumar Tripathi",
+  "description": "Software Engineer Portfolio - Building modern web applications with React, Next.js, and JavaScript. Specializing in Cybersecurity, AI/ML, and Game Development.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FEFCFB",
+  "theme_color": "#DC143C",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
+

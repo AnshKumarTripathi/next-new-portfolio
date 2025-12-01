@@ -1,4 +1,6 @@
-// components/Hero.js
+"use client";
+
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 const socials = [
@@ -10,6 +12,34 @@ const socials = [
 ];
 
 export default function Hero() {
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const videoContainerRef = useRef(null);
+
+  useEffect(() => {
+    // Use Intersection Observer to load video when it's about to be visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShouldLoadVideo(true);
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: "100px", // Start loading 100px before it's visible
+      }
+    );
+
+    if (videoContainerRef.current) {
+      observer.observe(videoContainerRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <section
       id="hero"
@@ -29,6 +59,7 @@ export default function Hero() {
 
       {/* Video Container */}
       <div
+        ref={videoContainerRef}
         style={{
           width: "100%",
           maxWidth: "32rem",
@@ -66,13 +97,38 @@ export default function Hero() {
               className="relative w-full flex items-center justify-center"
               style={{ paddingBottom: "56.25%" }}
             >
-              <iframe
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full rounded-lg transition-all duration-300 ease-in-out"
-                src="https://www.youtube.com/embed/1n_kSMQ8z-Q"
-                title="Maker video"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+              {shouldLoadVideo ? (
+                <iframe
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full rounded-lg transition-all duration-300 ease-in-out"
+                  src="https://www.youtube.com/embed/1n_kSMQ8z-Q?loading=lazy"
+                  title="Maker video"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              ) : (
+                <div
+                  className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full rounded-lg bg-muted flex items-center justify-center cursor-pointer"
+                  onClick={() => setShouldLoadVideo(true)}
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.2) 100%)",
+                  }}
+                >
+                  <div className="text-center">
+                    <svg
+                      className="w-16 h-16 mx-auto mb-2 text-foreground opacity-70"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                    <p className="text-sm text-muted-foreground">
+                      Click to load video
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

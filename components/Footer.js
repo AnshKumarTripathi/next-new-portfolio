@@ -1,5 +1,6 @@
 "use client";
 
+import { memo, useCallback } from "react";
 import Link from "next/link";
 import { Github, Linkedin, Mail } from "lucide-react";
 import { motion } from "framer-motion";
@@ -22,7 +23,7 @@ const contactLinks = [
   },
 ];
 
-export default function Footer() {
+function Footer() {
   return (
     <motion.footer
       initial={{ opacity: 0 }}
@@ -90,41 +91,71 @@ export default function Footer() {
           <div
             style={{
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
               gap: "1rem",
             }}
-            className="md:gap-6"
+            className="md:flex-row md:items-center md:gap-6"
           >
-            {contactLinks.map(({ label, href, icon: Icon }) => (
-              <Link
-                key={label}
-                href={href}
-                target={href.startsWith("mailto:") ? undefined : "_blank"}
-                rel={href.startsWith("mailto:") ? undefined : "noreferrer"}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.5rem",
-                  fontSize: "0.875rem",
-                  fontWeight: 500,
-                  color: "var(--muted-foreground)",
-                  transition: "color 0.2s",
-                  textDecoration: "none",
-                }}
-                aria-label={label}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "var(--foreground)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "var(--muted-foreground)";
-                }}
-              >
-                <Icon style={{ width: "1.25rem", height: "1.25rem" }} />
-                <span style={{ display: "none" }} className="sm:inline">
-                  {label}
-                </span>
-              </Link>
-            ))}
+            <Link
+              href="https://old.anshkumartripathi.space/#contact"
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                fontSize: "0.875rem",
+                fontWeight: 500,
+                color: "var(--accent)",
+                textDecoration: "none",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "rgba(91, 155, 213, 0.8)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "var(--accent)";
+              }}
+            >
+              Contact
+            </Link>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "1rem",
+              }}
+              className="md:gap-6"
+            >
+              {contactLinks.map(({ label, href, icon: Icon }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  target={href.startsWith("mailto:") ? undefined : "_blank"}
+                  rel={href.startsWith("mailto:") ? undefined : "noreferrer"}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    fontSize: "0.875rem",
+                    fontWeight: 500,
+                    color: "var(--muted-foreground)",
+                    transition: "color 0.2s",
+                    textDecoration: "none",
+                  }}
+                  aria-label={label}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = "var(--foreground)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = "var(--muted-foreground)";
+                  }}
+                >
+                  <Icon style={{ width: "1.25rem", height: "1.25rem" }} />
+                  <span style={{ display: "none" }} className="sm:inline">
+                    {label}
+                  </span>
+                </Link>
+              ))}
+            </div>
           </div>
 
           <div
@@ -208,3 +239,5 @@ export default function Footer() {
     </motion.footer>
   );
 }
+
+export default memo(Footer);

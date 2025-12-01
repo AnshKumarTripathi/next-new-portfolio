@@ -1,12 +1,23 @@
 "use client";
 
+import { memo, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Github, ExternalLink, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function ProjectCard({ project, imageUrl }) {
+function ProjectCard({ project, imageUrl }) {
   const { name, description, technologies, github, demo, youtube } = project;
+
+  const handleMouseEnter = useCallback((e) => {
+    e.currentTarget.style.boxShadow = "0 20px 25px -5px rgba(0, 0, 0, 0.1)";
+    e.currentTarget.style.transform = "translateY(-4px)";
+  }, []);
+
+  const handleMouseLeave = useCallback((e) => {
+    e.currentTarget.style.boxShadow = "0 10px 15px -3px rgba(0, 0, 0, 0.05)";
+    e.currentTarget.style.transform = "translateY(0)";
+  }, []);
 
   return (
     <motion.div
@@ -27,15 +38,8 @@ export default function ProjectCard({ project, imageUrl }) {
         transition: "all 0.3s ease",
         cursor: "pointer",
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = "0 20px 25px -5px rgba(0, 0, 0, 0.1)";
-        e.currentTarget.style.transform = "translateY(-4px)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow =
-          "0 10px 15px -3px rgba(0, 0, 0, 0.05)";
-        e.currentTarget.style.transform = "translateY(0)";
-      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Image Section */}
       <div
@@ -48,8 +52,9 @@ export default function ProjectCard({ project, imageUrl }) {
       >
         <Image
           src={imageUrl}
-          alt={name}
+          alt={`${name} project screenshot`}
           fill
+          loading="lazy"
           style={{
             objectFit: "cover",
           }}
@@ -225,3 +230,5 @@ export default function ProjectCard({ project, imageUrl }) {
     </motion.div>
   );
 }
+
+export default memo(ProjectCard);

@@ -1,11 +1,49 @@
 "use client";
 
+import { memo, useMemo } from "react";
 import Link from "next/link";
 import { Calendar, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
-export default function BlogCard({ blog }) {
+// Format date from ISO string to "30 Nov 2025" format
+function formatBlogDate(dateString) {
+  if (!dateString || dateString === "Coming Soon") {
+    return dateString;
+  }
+
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return dateString; // Return original if invalid date
+    }
+
+    const day = date.getDate();
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+
+    return `${day} ${month} ${year}`;
+  } catch (error) {
+    return dateString; // Return original on error
+  }
+}
+
+function BlogCard({ blog }) {
   const { title, excerpt, date, link } = blog;
+  const formattedDate = useMemo(() => formatBlogDate(date), [date]);
 
   return (
     <motion.div
@@ -53,7 +91,7 @@ export default function BlogCard({ blog }) {
         >
           {excerpt}
         </p>
-        {date && (
+        {formattedDate && (
           <div
             className="flex items-center text-xs text-muted-foreground"
             style={{
@@ -62,7 +100,7 @@ export default function BlogCard({ blog }) {
             }}
           >
             <Calendar className="h-3 w-3" />
-            <span>{date}</span>
+            <span>{formattedDate}</span>
           </div>
         )}
       </div>
@@ -91,3 +129,5 @@ export default function BlogCard({ blog }) {
     </motion.div>
   );
 }
+
+export default memo(BlogCard);
