@@ -4,8 +4,27 @@ import Link from "next/link";
 import { Calendar, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
+// Function to format date from ISO string to "DD Month YYYY" format
+function formatDate(dateString) {
+  if (!dateString) return "";
+
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString; // Return original if invalid
+
+    const day = date.getDate();
+    const month = date.toLocaleString("en-US", { month: "long" });
+    const year = date.getFullYear();
+
+    return `${day} ${month} ${year}`;
+  } catch (error) {
+    return dateString; // Return original if parsing fails
+  }
+}
+
 export default function BlogCard({ blog }) {
   const { title, excerpt, date, link } = blog;
+  const formattedDate = formatDate(date);
 
   return (
     <motion.div
@@ -66,7 +85,7 @@ export default function BlogCard({ blog }) {
         >
           {excerpt}
         </p>
-        {date && (
+        {formattedDate && (
           <div
             style={{
               display: "flex",
@@ -77,7 +96,7 @@ export default function BlogCard({ blog }) {
             }}
           >
             <Calendar style={{ width: "0.75rem", height: "0.75rem" }} />
-            <span>{date}</span>
+            <span>{formattedDate}</span>
           </div>
         )}
       </div>
@@ -85,6 +104,8 @@ export default function BlogCard({ blog }) {
       {link && (
         <Link
           href={link}
+          target="_blank"
+          rel="noreferrer"
           style={{
             display: "flex",
             alignItems: "center",

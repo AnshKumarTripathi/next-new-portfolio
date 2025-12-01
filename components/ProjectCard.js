@@ -32,7 +32,8 @@ export default function ProjectCard({ project, imageUrl }) {
         e.currentTarget.style.transform = "translateY(-4px)";
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = "0 10px 15px -3px rgba(0, 0, 0, 0.05)";
+        e.currentTarget.style.boxShadow =
+          "0 10px 15px -3px rgba(0, 0, 0, 0.05)";
         e.currentTarget.style.transform = "translateY(0)";
       }}
     >
@@ -77,7 +78,14 @@ export default function ProjectCard({ project, imageUrl }) {
           padding: "1.5rem",
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem", flex: 1 }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.75rem",
+            flex: 1,
+          }}
+        >
           <h3
             style={{
               fontSize: "1.5rem",
@@ -217,4 +225,3 @@ export default function ProjectCard({ project, imageUrl }) {
     </motion.div>
   );
 }
-

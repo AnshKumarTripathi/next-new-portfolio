@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Hero from "@/components/Hero";
 import ProjectCard from "@/components/ProjectCard";
@@ -40,32 +41,70 @@ const featuredProjects = [
   },
 ];
 
-// Featured Blog Posts (Placeholder - Top 3)
-const featuredBlogs = [
+// Fallback blog posts (if API fails)
+const fallbackBlogs = [
   {
     title: "Building Privacy-First Web Applications",
     excerpt:
       "Exploring the importance of client-side processing and privacy in modern web development. Learn how to build applications that respect user data.",
     date: "Coming Soon",
-    link: "#",
+    link: "https://blog.anshkumartripathi.space/",
   },
   {
     title: "Understanding Pathfinding Algorithms",
     excerpt:
       "A deep dive into various pathfinding algorithms including A*, Dijkstra's, and Jump Point Search. Visual explanations and practical implementations.",
     date: "Coming Soon",
-    link: "#",
+    link: "https://blog.anshkumartripathi.space/",
   },
   {
     title: "AI/ML in Web Development",
     excerpt:
       "How machine learning and artificial intelligence are transforming web development. Real-world examples and practical applications.",
     date: "Coming Soon",
-    link: "#",
+    link: "https://blog.anshkumartripathi.space/",
   },
 ];
 
+// Function to fetch popular blog posts via our API proxy
+async function fetchPopularBlogs() {
+  try {
+    const response = await fetch("/api/blog/popular", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      if (Array.isArray(data) && data.length > 0) {
+        return data;
+      }
+    }
+    return null;
+  } catch (error) {
+    console.error("Error fetching blog posts:", error);
+    return null;
+  }
+}
+
 export default function Home() {
+  const [featuredBlogs, setFeaturedBlogs] = useState(fallbackBlogs);
+  const [isLoadingBlogs, setIsLoadingBlogs] = useState(true);
+
+  useEffect(() => {
+    async function loadBlogs() {
+      setIsLoadingBlogs(true);
+      const blogs = await fetchPopularBlogs();
+      if (blogs && blogs.length > 0) {
+        setFeaturedBlogs(blogs);
+      }
+      setIsLoadingBlogs(false);
+    }
+
+    loadBlogs();
+  }, []);
   return (
     <>
       {/* Hero Section - Full Viewport Height */}
@@ -282,17 +321,53 @@ export default function Home() {
             </div>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gap: "1.5rem",
-            }}
-            className="grid-cols-1 md:grid-cols-3"
-          >
-            {featuredBlogs.map((blog, index) => (
-              <BlogCard key={index} blog={blog} />
-            ))}
-          </div>
+          {isLoadingBlogs ? (
+            <div
+              style={{
+                display: "grid",
+                gap: "1.5rem",
+              }}
+              className="grid-cols-1 md:grid-cols-3"
+            >
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  style={{
+                    backgroundColor: "var(--background-rgba-20)",
+                    backdropFilter: "blur(16px)",
+                    border: "1px solid var(--border-rgba-50)",
+                    borderRadius: "0.75rem",
+                    padding: "1.5rem",
+                    height: "300px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      color: "var(--muted-foreground)",
+                      fontSize: "0.875rem",
+                    }}
+                  >
+                    Loading...
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "grid",
+                gap: "1.5rem",
+              }}
+              className="grid-cols-1 md:grid-cols-3"
+            >
+              {featuredBlogs.map((blog, index) => (
+                <BlogCard key={index} blog={blog} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
