@@ -359,7 +359,7 @@ export default function Home() {
             <div
               style={{
                 display: "grid",
-                gap: "1.5rem",
+                gap: "2rem",
               }}
               className="grid-cols-1 md:grid-cols-3"
             >
