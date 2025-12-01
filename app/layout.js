@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
             <ThemeToggle />
             <div className="flex min-h-screen flex-col">
               <Navigation />
-              <div className="h-24 md:h-24" aria-hidden />
+              {/* <div className="h-24 md:h-24" aria-hidden /> */}
               <main className="flex-1 w-full pt-24 flex justify-center">
                 <div className="mx-auto flex w-[90%] max-w-[1152px] flex-col gap-12 px-4 md:px-6">
                   {children}

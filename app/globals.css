@@ -11,6 +11,11 @@
   --accent-foreground: #ffffff;
   --card: #FDFBF9;
   --card-foreground: #2D2D2D;
+  /* RGBA versions for glass morphism */
+  --background-rgba-20: rgba(254, 252, 251, 0.2);
+  --border-rgba-50: rgba(232, 230, 228, 0.5);
+  --border-rgba-30: rgba(232, 230, 228, 0.3);
+  --muted-rgba-50: rgba(249, 247, 245, 0.5);
 }
 
 [data-theme="dark"] {
@@ -23,6 +28,11 @@
   --accent-foreground: #1C1C1C;
   --card: #2A2A2A;
   --card-foreground: #F5F5F5;   /* Light gray for card text */
+  /* RGBA versions for glass morphism - dark theme */
+  --background-rgba-20: rgba(42, 42, 42, 0.2);
+  --border-rgba-50: rgba(58, 58, 58, 0.5);
+  --border-rgba-30: rgba(58, 58, 58, 0.3);
+  --muted-rgba-50: rgba(42, 42, 42, 0.5);
 }
 
 @theme {

@@ -9,8 +9,8 @@ import { useRipple } from "@/lib/rippleContext";
 
 const navItems = [
   { name: "About", href: "/" },
-  { name: "Projects", href: "/projects" },
-  { name: "Contact", href: "/contact" },
+  { name: "Projects", href: "https://project.anshkumartripathi.space" },
+  { name: "Contact", href: "https://old.anshkumartripathi.space/#contact" },
 ];
 
 export default function Navigation() {
@@ -211,20 +211,23 @@ export default function Navigation() {
             href="/"
             className="text-lg font-semibold text-foreground hover:opacity-80 transition-opacity"
           >
-            Portfolio
+            Ansh Kumar Tripathi
           </Link>
 
           {/* Desktop Navigation Items */}
           <div className="flex items-center gap-6 lg:gap-8">
             {navItems.map((item) => {
               const isActive = pathname === item.href;
+              const isExternal = item.href.startsWith("http");
               return (
                 <Link
                   key={item.name}
                   href={item.href}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noreferrer" : undefined}
                   className="relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  {isActive && (
+                  {isActive && !isExternal && (
                     <motion.div
                       layoutId="activeTab"
                       className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent rounded-full"
@@ -235,7 +238,7 @@ export default function Navigation() {
                       }}
                     />
                   )}
-                  <span className={isActive ? "text-foreground" : ""}>
+                  <span className={isActive && !isExternal ? "text-foreground" : ""}>
                     {item.name}
                   </span>
                 </Link>
@@ -267,7 +270,7 @@ export default function Navigation() {
           `}
         >
           <Link href="/" className="text-xl font-semibold text-foreground">
-            Portfolio
+            Ansh Kumar Tripathi
           </Link>
 
           {/* Mobile Menu Button */}
@@ -298,13 +301,16 @@ export default function Navigation() {
         <div className="flex flex-col gap-4 px-6 py-4">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
+            const isExternal = item.href.startsWith("http");
             return (
               <Link
                 key={item.name}
                 href={item.href}
+                target={isExternal ? "_blank" : undefined}
+                rel={isExternal ? "noreferrer" : undefined}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`text-base font-medium transition-colors ${
-                  isActive
+                  isActive && !isExternal
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
                 }`}

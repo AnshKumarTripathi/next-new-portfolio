@@ -1,0 +1,225 @@
+PORTFOLIO WEBSITE DATA SUMMARY
+
+PERSONAL INFORMATION
+Name: Ansh Kumar Tripathi
+Title: Software Engineering Student
+Email: anshtrips07@gmail.com
+GitHub: https://github.com/AnshKumarTripathi
+LinkedIn: https://www.linkedin.com/in/ansh-kumar-tripathi-64841a2b5/
+Resume: ansh-kumar-tripathi-resume.pdf
+
+PORTFOLIO DOMAINS
+Main Portfolio - General web development projects
+AI/ML Portfolio - Machine learning and artificial intelligence projects
+Cybersecurity Portfolio - Security analysis and penetration testing
+Game Development Portfolio - Unity, Pygame, and Assembly game projects
+Maker Portfolio - Hardware projects, IoT, and electronics
+
+MAIN PORTFOLIO PROJECTS
+ResumeSpace (Featured)
+Description: Privacy-focused resume building tool with complete client-side processing
+Technologies: TypeScript, HTML, CSS, JavaScript, React
+Launch Date: 15 Oct 2025
+GitHub: https://github.com/AnshKumarTripathi/ResumeSpace
+Demo: https://www.resume-builder.space/
+YouTube: https://youtu.be/2SzDcSlD3Cg
+Category: Website Development
+Difficulty: Advanced
+DocuSplit (Featured)
+Description: Automated PDF document splitting and personalization tool
+Technologies: Python, Streamlit, PDF Processing, File Automation
+Launch Date: 10 May 2025
+GitHub: https://github.com/AnshKumarTripathi/DocuSplit
+Demo: https://doc2pdfsplitter.streamlit.app/
+YouTube: https://youtu.be/lKcZ3MCwqUc
+Category: Website Development
+Difficulty: Intermediate
+Pathfinding Algorithm Visualizer (Featured)
+Description: Interactive web tool demonstrating five pathfinding algorithms
+Technologies: JavaScript, Algorithms, DFS, BFS, A, Greedy Search, Jump Point Search
+Date: 16 Mar 2025
+GitHub: https://github.com/AnshKumarTripathi/search-algo-visv
+Demo: https://anshkumartripathi.github.io/search-algo-visv/
+Category: Educational
+Difficulty: Intermediate
+Satkarma LEO Club Booklet
+Description: Web-based club booklet showcasing activities
+Technologies: Content Creation, Layout Design, HTML, CSS, JavaScript, GitHub Pages
+Date: 23 Nov 2024
+GitHub: https://github.com/AnshKumarTripathi/satkarma-leo-booklet
+Demo: https://anshkumartripathi.github.io/satkarma-leo-booklet/#home
+Category: Content Creation
+Difficulty: Beginner
+Shortest-Path-on-Map
+Description: Algorithm to find optimal path between multiple coordinates
+Technologies: JavaScript, Algorithms, Pathfinding, Map Optimization, Graph Theory
+Date: 8 Mar 2025
+GitHub: https://github.com/AnshKumarTripathi/Shortest-Path-on-Map
+Demo: https://anshkumartripathi.github.io/Shortest-Path-on-Map/
+Category: Algorithms
+Difficulty: Intermediate
+SkillMatch
+Description: Job matching web application based on skills and preferences
+Technologies: HTML, CSS, JavaScript, Job Matching, Skills Assessment
+Date: 14 Mar 2025
+GitHub: https://github.com/AnshKumarTripathi/skill-match
+Demo: https://anshkumartripathi.github.io/skill-match/
+Category: Website Development
+Difficulty: Beginner
+AI/ML PORTFOLIO PROJECTS
+Intel Global Impact Fest Project (Featured)
+Description: AI-powered camera vision system for real-time hazard detection in manufacturing
+Technologies: 3D Modelling, AI/ML, Pathfinding, Training ML Models, PPE Detection, Computer Vision, Unity, Python
+Performance: 95.2% accuracy, 93.8% precision, 96.5% recall, 95.1% F1
+Date: 9 Sep 2025
+GitHub: https://github.com/AnshKumarTripathi/Intel-Internship-Final-Project-python
+Unity GitHub: https://github.com/AnshKumarTripathi/Unity-internship-intel-project
+YouTube: https://youtu.be/1Ib96i8-1AY
+Category: Model Development
+Difficulty: Advanced
+GrayMatter (Featured)
+Description: Lightweight AI-powered study assistant with offline capabilities
+Technologies: Python, RAG (Retrieval-Augmented Generation), AI Chatbot, Offline AI, Study Assistant
+Performance: 92.5% accuracy, 90.8% precision, 94.2% recall, 92.4% F1
+Date: 19 Apr 2025
+GitHub: https://github.com/AnshKumarTripathi/GrayMatter
+YouTube: https://youtu.be/XNu9ywhsd8c
+Category: AI/ML
+Difficulty: Advanced
+LinkedIn Sentiment Analysis Platform (Featured)
+Description: Flask-based web application for real-time sentiment analysis on social media
+Technologies: Python, Flask, NLP, Web Scraping, Sentiment Analysis, Transformers, Selenium
+Performance: 88.7% accuracy, 86.3% precision, 91.1% recall, 88.6% F1
+Date: 19 Jan 2025
+GitHub: https://github.com/AnshKumarTripathi/sentiment_analysis_platform
+YouTube: https://youtu.be/MRhXm7maprA
+Category: Website Development
+Difficulty: Advanced
+Human Pose Estimation Web App
+Description: Web application for human pose estimation using OpenPose
+Technologies: Python, OpenCV, Streamlit, OpenPose, Computer Vision
+Performance: 85.4% accuracy, 83.2% precision, 87.6% recall, 85.3% F1
+Date: 12 Jan 2025
+GitHub: https://github.com/AnshKumarTripathi/AICTE-Internship-Dec-Jan-Techsaksham
+Category: AI/ML
+Difficulty: Intermediate
+Prahavati Smart India Hackathon (Featured)
+Description: Traffic signal optimization using reinforcement learning
+Technologies: Python, Reinforcement Learning, Traffic Optimization, Simulation
+Performance: 78.9% accuracy, 76.5% precision, 81.3% recall, 78.8% F1
+Date: 09 Nov 2024
+GitHub: https://github.com/AnshKumarTripathi/Smart-Traffic-Control--phase-one
+YouTube: https://www.youtube.com/watch?v=eP2X-dVapPs
+Category: Reinforcement Learning
+Difficulty: Advanced
+
+GAME DEVELOPMENT PORTFOLIO PROJECTS
+Pong Game in Assembly (Featured)
+Description: Classic Pong game implemented in assembly language
+Technologies: Assembly Language, Low-level Programming, Hardware Interaction
+Date: 09 Nov 2024
+GitHub: https://github.com/AnshKumarTripathi/PONG-Game-Assembly
+YouTube: https://www.youtube.com/watch?v=B1JLMqeY6RM
+Category: Classic Arcade
+Difficulty: Advanced
+Tower Defense - Vampire Survival (Featured)
+Description: Tower defense game with vampire survival elements
+Technologies: Pygame, Python, Game Development
+Date: 03 Aug 2024
+Demo: https://codercaptainred.itch.io/tower-defense-vampire-survival
+Category: Strategy
+Difficulty: Intermediate
+survivefor10sec (Featured)
+Description: Survival game with AI pathfinding for enemies
+Technologies: Unity, C#, AI Pathfinding, Game Development
+Date: 30 Apr 2024
+Demo: https://codercaptainred.itch.io/survivefor10sec
+Category: Survival
+Difficulty: Intermediate
+Glowing Snake
+Description: Enhanced Snake game with post-processing effects
+Technologies: Unity, C#, Post Processing, Game Development
+Date: 30 Apr 2024
+Demo: https://codercaptainred.itch.io/glowing-snake
+YouTube: https://www.youtube.com/watch?v=TZOjmDsoV1A
+Category: Classic Games
+Difficulty: Beginner
+Step Wisely!!
+Description: First 2D platformer game
+Technologies: Unity, C#, 2D Game Development, Platformer
+Date: 15 Apr 2023
+Demo: https://codercaptainred.itch.io/step-wisely
+Category: Platformer
+Difficulty: Beginner
+
+CERTIFICATIONS
+Standalone Certifications
+Deloitte Technology Job Simulation (13 July 2025) - Professional Skills
+Deloitte Cyber Job Simulation (13 July 2025) - Professional Skills
+Nvidia: Introduction to Networking (27 Jan 2025) - Networking
+Oracle: Oracle Java Foundations (11 Feb 2025) - Programming
+Stanford University Introduction to Mathematical Thinking (Ongoing) - Mathematics
+Specializations
+UCI: An Introduction to Programming the IoT (9 Mar 2025) - IoT & Embedded Systems
+IBM: IBM AI Developer (21 Jul 2025) - AI & Machine Learning
+IBM: IBM Full Stack Software Developer (Ongoing) - Web Development
+University of Michigan: Python for Everybody (Ongoing) - Programming
+Google: Google Cybersecurity (Ongoing) - Cybersecurity
+IBM: People and Soft Skills for Professional and Personal Success (Ongoing) - Professional Skills
+Individual Certificates (Sample)
+IBM: Intro to Software Engineering (with honors) (21 Feb 2025)
+IBM: Python for Data Science, AI & Development (30 Mar 2025)
+IBM: Developing AI Applications with Python and Flask (4 Apr 2025)
+Google: Foundation of Cybersecurity (14 Jun 2025)
+Google: Play it Safe: Manage Security Risks (2 Jul 2025)
+Google: Connect and Protect: Networks and Network Security (28 Sept 2025)
+
+SKILLS BY DOMAIN
+Web Development
+React, Next.js, Node.js, JavaScript, Tailwind CSS, DaisyUI, HTML, CSS, Flask, Django, Express
+Game Development
+Unity, Godot, Pygame, C#, C++, Game Design, Assembly Language, Post Processing, AI Pathfinding
+AI/ML
+Python, TensorFlow, PyTorch, Data Science, NLP, Computer Vision, Machine Learning, Deep Learning, Generative AI, RAG
+
+TECHNICAL STATISTICS
+AI/ML Portfolio Stats
+Years Experience: 2
+Technologies Used: 15+
+AI Projects: 5+
+Accuracy: 85%
+Game Development Portfolio Stats
+Games Developed: 5+
+Platforms: 4
+Languages Used: 4
+Years Experience: 2+
+
+PROJECT LINKS AND RESOURCES
+GitHub Repositories
+Main: https://github.com/AnshKumarTripathi
+ResumeSpace: https://github.com/AnshKumarTripathi/ResumeSpace
+DocuSplit: https://github.com/AnshKumarTripathi/DocuSplit
+Pathfinding Visualizer: https://github.com/AnshKumarTripathi/search-algo-visv
+GrayMatter: https://github.com/AnshKumarTripathi/GrayMatter
+Intel Project: https://github.com/AnshKumarTripathi/Intel-Internship-Final-Project-python
+Sentiment Analysis: https://github.com/AnshKumarTripathi/sentiment_analysis_platform
+Demo Links
+ResumeSpace: https://www.resume-builder.space/
+DocuSplit: https://doc2pdfsplitter.streamlit.app/
+Pathfinding Visualizer: https://anshkumartripathi.github.io/search-algo-visv/
+SkillMatch: https://anshkumartripathi.github.io/skill-match/
+Aviation IoT Presentation: https://anshkumartripathi.github.io/Aviation-IoT-Presentation/index.html
+Game Demos (Itch.io)
+Tower Defense: https://codercaptainred.itch.io/tower-defense-vampire-survival
+Survive for 10sec: https://codercaptainred.itch.io/survivefor10sec
+Glowing Snake: https://codercaptainred.itch.io/glowing-snake
+Step Wisely: https://codercaptainred.itch.io/step-wisely
+YouTube Videos
+ResumeSpace: https://youtu.be/2SzDcSlD3Cg
+DocuSplit: https://youtu.be/lKcZ3MCwqUc
+Intel Project: https://youtu.be/1Ib96i8-1AY
+GrayMatter: https://youtu.be/XNu9ywhsd8c
+Sentiment Analysis: https://youtu.be/MRhXm7maprA
+Pong Assembly: https://www.youtube.com/watch?v=B1JLMqeY6RM
+Glowing Snake: https://www.youtube.com/watch?v=TZOjmDsoV1A
+Traffic Control: https://www.youtube.com/watch?v=eP2X-dVapPs
