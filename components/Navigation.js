@@ -33,6 +33,7 @@ export default function Navigation() {
   const sectionsRef = useRef({ projects: null, blog: null });
   const lastScrollUpdateRef = useRef(0);
   const throttleDelay = 100; // Throttle scroll updates to every 100ms
+  const lastIsScrolledRef = useRef(false);
 
   // Cache section elements
   const updateSectionsCache = useCallback(() => {
@@ -55,8 +56,17 @@ export default function Navigation() {
     return "about";
   }, []);
 
-  // Initialize active section on mount
+  // Initialize active section and scroll state on mount
   useEffect(() => {
+    // Initialize scroll state (deferred to avoid cascading renders)
+    const initialScroll = window.scrollY;
+    const initialIsScrolled = initialScroll > 50;
+    lastIsScrolledRef.current = initialIsScrolled;
+
+    requestAnimationFrame(() => {
+      setIsScrolled(initialIsScrolled);
+    });
+
     if (pathname === "/") {
       // Use setTimeout to defer state update and avoid cascading renders
       setTimeout(() => {
@@ -70,14 +80,20 @@ export default function Navigation() {
   // Throttled scroll handler
   useMotionValueEvent(scrollY, "change", (latest) => {
     const now = Date.now();
+    const newIsScrolled = latest > 50;
 
-    // Throttle scroll updates
+    // Always update isScrolled immediately when crossing the threshold
+    // This ensures the navbar expands/collapses properly even during fast scrolling
+    if (newIsScrolled !== lastIsScrolledRef.current) {
+      setIsScrolled(newIsScrolled);
+      lastIsScrolledRef.current = newIsScrolled;
+    }
+
+    // Throttle other scroll updates (active section, etc.)
     if (now - lastScrollUpdateRef.current < throttleDelay) {
       return;
     }
     lastScrollUpdateRef.current = now;
-
-    setIsScrolled(latest > 50);
 
     // Update active section based on scroll position
     if (pathname === "/") {

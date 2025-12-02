@@ -172,7 +172,7 @@ function Footer() {
           >
             <span>Check out</span>
             <Link
-              href="https://ai.anshkumartripathi.space"
+              href="https://certificates.anshkumartripathi.space"
               target="_blank"
               rel="noreferrer"
               style={{
@@ -188,11 +188,36 @@ function Footer() {
                 e.currentTarget.style.color = "var(--accent)";
               }}
             >
-              AI
+              all certificates
             </Link>
+            <span>•</span>
+            <span className="relative group inline-block cursor-default">
+              <span
+                style={{
+                  color: "var(--accent)",
+                  fontWeight: 500,
+                  cursor: "not-allowed",
+                }}
+              >
+                AI
+              </span>
+              <span
+                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 text-xs text-foreground bg-card border border-border/70 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10"
+                style={{
+                  backgroundColor: "var(--card)",
+                  borderColor: "var(--border)",
+                  paddingLeft: "0.5rem",
+                  paddingRight: "0.5rem",
+                  paddingTop: "0.25rem",
+                  paddingBottom: "0.25rem",
+                }}
+              >
+                coming soon
+              </span>
+            </span>
             <span>portfolio</span>
             <span>•</span>
-            <Link
+            {/* <Link
               href="https://game.anshkumartripathi.space"
               target="_blank"
               rel="noreferrer"
@@ -210,10 +235,34 @@ function Footer() {
               }}
             >
               Game
-            </Link>
+            </Link> */}
+            <span className="relative group inline-block cursor-default">
+              <span
+                style={{
+                  color: "var(--accent)",
+                  fontWeight: 500,
+                  cursor: "not-allowed",
+                }}
+              >
+                Game
+              </span>
+              <span
+                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 text-xs text-foreground bg-card border border-border/70 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10"
+                style={{
+                  backgroundColor: "var(--card)",
+                  borderColor: "var(--border)",
+                  paddingLeft: "0.5rem",
+                  paddingRight: "0.5rem",
+                  paddingTop: "0.25rem",
+                  paddingBottom: "0.25rem",
+                }}
+              >
+                coming soon
+              </span>
+            </span>
             <span>portfolio</span>
             <span>•</span>
-            <Link
+            {/* <Link
               href="https://cyber.anshkumartripathi.space"
               target="_blank"
               rel="noreferrer"
@@ -231,9 +280,61 @@ function Footer() {
               }}
             >
               Cyber
-            </Link>
+            </Link> */}
+            <span className="relative group inline-block cursor-default">
+              <span
+                style={{
+                  color: "var(--accent)",
+                  fontWeight: 500,
+                  cursor: "not-allowed",
+                }}
+              >
+                Cyber
+              </span>
+              <span
+                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 text-xs text-foreground bg-card border border-border/70 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10"
+                style={{
+                  backgroundColor: "var(--card)",
+                  borderColor: "var(--border)",
+                  paddingLeft: "0.5rem",
+                  paddingRight: "0.5rem",
+                  paddingTop: "0.25rem",
+                  paddingBottom: "0.25rem",
+                }}
+              >
+                coming soon
+              </span>
+            </span>
             <span>portfolio</span>
           </div>
+        </div>
+
+        {/* Quote Section */}
+        <div
+          style={{
+            textAlign: "center",
+            fontSize: "0.875rem",
+            color: "var(--muted-foreground)",
+            fontStyle: "italic",
+            width: "100%",
+            marginTop: "1rem",
+          }}
+        >
+          &quot;Code is like humor. When you have to explain it, it&apos;s
+          bad.&quot; ~ Cory House
+        </div>
+
+        {/* All Rights Reserved */}
+        <div
+          style={{
+            textAlign: "center",
+            fontSize: "0.75rem",
+            color: "var(--muted-foreground)",
+            width: "100%",
+            marginTop: "0.5rem",
+          }}
+        >
+          © All rights reserved
         </div>
       </div>
     </motion.footer>
