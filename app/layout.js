@@ -1,16 +1,9 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/lib/theme";
 import { RippleProvider } from "@/lib/rippleContext";
+import { LanguageProvider } from "@/lib/languageContext";
 import Navigation from "@/components/Navigation";
-import ThemeToggle from "@/components/ThemeToggle";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"], // Removed 300 weight to reduce font bundle size
-  display: "swap", // Better font loading performance
-});
+import SystemSidebar from "@/components/SystemSidebar";
 
 export const metadata = {
   title: "Ansh Kumar Tripathi - Software Engineer",
@@ -73,21 +66,35 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning data-theme="dark">
+      <body className="antialiased">
         <Providers>
-          <RippleProvider>
-            <ThemeToggle />
-            <div className="flex min-h-screen flex-col">
-              <Navigation />
-              {/* <div className="h-24 md:h-24" aria-hidden /> */}
-              <main className="flex-1 w-full pt-24 flex justify-center">
-                <div className="mx-auto flex w-[90%] max-w-[1152px] flex-col gap-12 px-4 md:px-6">
+          <LanguageProvider>
+            <RippleProvider>
+              <div
+                style={{
+                  display: "flex",
+                  minHeight: "100vh",
+                  flexDirection: "column",
+                  width: "100%",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Navigation />
+                <SystemSidebar />
+                <main
+                  style={{
+                    flex: "1 1 0%",
+                    width: "100%",
+                    paddingTop: "3.5rem",
+                  }}
+                >
                   {children}
-                </div>
-              </main>
-            </div>
-          </RippleProvider>
+                </main>
+              </div>
+            </RippleProvider>
+          </LanguageProvider>
         </Providers>
       </body>
     </html>

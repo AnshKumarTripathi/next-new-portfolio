@@ -51,81 +51,119 @@ function BlogCard({ blog }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="
-        flex flex-col
-        rounded-lg
-        bg-background/20 backdrop-blur-lg
-        border border-border/50
-        shadow-lg shadow-black/5
-        hover:shadow-xl hover:shadow-black/10
-        transition-all duration-300
-        h-full
-      "
       style={{
-        padding: "1.5rem",
-        gap: "1rem",
+        display: "flex",
+        flexDirection: "row",
+        borderRadius: 0,
+        backgroundColor: "var(--card)",
+        border: "1px solid var(--border)",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.3)",
+        transition: "all 0.3s",
+        minHeight: "150px",
+        fontFamily: "monospace",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = "0 6px 8px rgba(0, 0, 0, 0.4)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.3)";
       }}
     >
+      {/* Accent Bar */}
       <div
-        className="flex flex-col flex-1"
         style={{
-          gap: "0.75rem",
+          width: "4px",
+          minWidth: "4px",
+          backgroundColor: "var(--accent)",
+        }}
+      />
+
+      {/* Content Section */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          padding: "1.5rem",
+          gap: "1rem",
         }}
       >
-        <h3
-          className="text-xl font-semibold text-foreground"
+        <div
           style={{
-            margin: 0,
-            padding: 0,
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.75rem",
+            flex: 1,
           }}
         >
-          {title}
-        </h3>
-        <p
-          className="text-sm text-muted-foreground leading-relaxed flex-1"
-          style={{
-            margin: 0,
-            padding: 0,
-            lineHeight: "1.6",
-          }}
-        >
-          {excerpt}
-        </p>
-        {formattedDate && (
-          <div
-            className="flex items-center text-xs text-muted-foreground"
+          <h3
             style={{
-              gap: "0.5rem",
-              marginTop: "0.5rem",
+              fontSize: "1.25rem",
+              fontWeight: 600,
+              color: "var(--foreground)",
+              margin: 0,
+              padding: 0,
             }}
           >
-            <Calendar className="h-3 w-3" />
-            <span>{formattedDate}</span>
-          </div>
+            {title}
+          </h3>
+          <p
+            style={{
+              fontSize: "0.875rem",
+              color: "var(--muted-foreground)",
+              lineHeight: "1.6",
+              flex: 1,
+              margin: 0,
+              padding: 0,
+            }}
+          >
+            {excerpt}
+          </p>
+          {formattedDate && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                marginTop: "0.5rem",
+                fontSize: "0.75rem",
+                color: "var(--muted-foreground)",
+              }}
+            >
+              <Calendar style={{ width: "0.75rem", height: "0.75rem" }} />
+              <span>{formattedDate}</span>
+            </div>
+          )}
+        </div>
+
+        {link && (
+          <Link
+            href={link}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              color: "var(--terminal-blue)",
+              textDecoration: "none",
+              paddingTop: "1rem",
+              marginTop: "0.5rem",
+              borderTop: "1px solid var(--border)",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = "var(--accent)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = "var(--terminal-blue)";
+            }}
+          >
+            <span>Read More</span>
+            <ArrowRight style={{ width: "1rem", height: "1rem" }} />
+          </Link>
         )}
       </div>
-
-      {link && (
-        <Link
-          href={link}
-          className="
-            flex items-center
-            text-sm font-medium text-accent
-            hover:text-accent/80
-            transition-colors
-          "
-          style={{
-            gap: "0.5rem",
-            paddingTop: "1rem",
-            marginTop: "0.5rem",
-            borderTop: "1px solid var(--border)",
-            borderTopColor: "rgba(var(--border-rgb), 0.3)",
-          }}
-        >
-          <span>Read More</span>
-          <ArrowRight className="h-4 w-4" />
-        </Link>
-      )}
     </motion.div>
   );
 }

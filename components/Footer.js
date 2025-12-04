@@ -32,7 +32,7 @@ function Footer() {
       transition={{ duration: 0.5 }}
       style={{
         width: "100%",
-        maxWidth: "72rem",
+        maxWidth: "54rem",
         marginLeft: "auto",
         marginRight: "auto",
         marginTop: "4rem",
@@ -46,15 +46,15 @@ function Footer() {
           alignItems: "center",
           justifyContent: "space-between",
           gap: "1.5rem",
-          borderRadius: "0.5rem",
-          backgroundColor: "var(--background-rgba-20)",
-          backdropFilter: "blur(16px)",
-          border: "1px solid var(--border-rgba-50)",
-          boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.05)",
+          borderRadius: 0,
+          backgroundColor: "var(--card)",
+          border: "1px solid var(--border)",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.3)",
           paddingLeft: "1.5rem",
           paddingRight: "1.5rem",
           paddingTop: "1.5rem",
           paddingBottom: "1.5rem",
+          fontFamily: "monospace",
         }}
         className="md:flex-row md:px-8"
       >
@@ -76,6 +76,15 @@ function Footer() {
             }}
           >
             Software Engineering Student
+          </p>
+          <p
+            style={{
+              fontSize: "0.75rem",
+              color: "var(--muted-foreground)",
+              marginTop: "0.5rem",
+            }}
+          >
+            Linux • AI • Web
           </p>
         </div>
 
@@ -104,15 +113,15 @@ function Footer() {
               style={{
                 fontSize: "0.875rem",
                 fontWeight: 500,
-                color: "var(--accent)",
+                color: "var(--terminal-blue)",
                 textDecoration: "none",
                 transition: "color 0.2s",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = "rgba(91, 155, 213, 0.8)";
+                e.currentTarget.style.color = "var(--accent)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = "var(--accent)";
+                e.currentTarget.style.color = "var(--terminal-blue)";
               }}
             >
               Contact
@@ -137,16 +146,16 @@ function Footer() {
                     gap: "0.5rem",
                     fontSize: "0.875rem",
                     fontWeight: 500,
-                    color: "var(--muted-foreground)",
+                    color: "var(--terminal-blue)",
                     transition: "color 0.2s",
                     textDecoration: "none",
                   }}
                   aria-label={label}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.color = "var(--foreground)";
+                    e.currentTarget.style.color = "var(--accent)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "var(--muted-foreground)";
+                    e.currentTarget.style.color = "var(--terminal-blue)";
                   }}
                 >
                   <Icon style={{ width: "1.25rem", height: "1.25rem" }} />
@@ -309,21 +318,6 @@ function Footer() {
           </div>
         </div>
 
-        {/* Quote Section */}
-        <div
-          style={{
-            textAlign: "center",
-            fontSize: "0.875rem",
-            color: "var(--muted-foreground)",
-            fontStyle: "italic",
-            width: "100%",
-            marginTop: "1rem",
-          }}
-        >
-          &quot;Code is like humor. When you have to explain it, it&apos;s
-          bad.&quot; ~ Cory House
-        </div>
-
         {/* All Rights Reserved */}
         <div
           style={{
@@ -334,7 +328,7 @@ function Footer() {
             marginTop: "0.5rem",
           }}
         >
-          © All rights reserved
+          © 2025 Ansh Kumar Tripathi
         </div>
       </div>
     </motion.footer>

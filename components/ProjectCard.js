@@ -1,23 +1,15 @@
 "use client";
 
-import { memo, useCallback } from "react";
+import { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Github, ExternalLink, Youtube } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/lib/languageContext";
 
 function ProjectCard({ project, imageUrl }) {
   const { name, description, technologies, github, demo, youtube } = project;
-
-  const handleMouseEnter = useCallback((e) => {
-    e.currentTarget.style.boxShadow = "0 20px 25px -5px rgba(0, 0, 0, 0.1)";
-    e.currentTarget.style.transform = "translateY(-4px)";
-  }, []);
-
-  const handleMouseLeave = useCallback((e) => {
-    e.currentTarget.style.boxShadow = "0 10px 15px -3px rgba(0, 0, 0, 0.05)";
-    e.currentTarget.style.transform = "translateY(0)";
-  }, []);
+  const { t } = useLanguage();
 
   return (
     <motion.div
@@ -26,26 +18,30 @@ function ProjectCard({ project, imageUrl }) {
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
       style={{
-        backgroundColor: "var(--background-rgba-20)",
-        backdropFilter: "blur(16px)",
-        border: "1px solid var(--border-rgba-50)",
-        borderRadius: "0.75rem",
-        boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.05)",
+        backgroundColor: "var(--card)",
+        border: "1px solid var(--border)",
+        borderRadius: 0,
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.3)",
         overflow: "hidden",
-        height: "100%",
+        height: "200px",
         display: "flex",
-        flexDirection: "column",
-        transition: "all 0.3s ease",
-        cursor: "pointer",
+        flexDirection: "row",
+        transition: "all 0.3s",
+        fontFamily: "monospace",
       }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = "0 6px 8px rgba(0, 0, 0, 0.4)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.3)";
+      }}
     >
       {/* Image Section */}
       <div
         style={{
           position: "relative",
-          width: "100%",
+          width: "300px",
+          minWidth: "300px",
           height: "200px",
           overflow: "hidden",
         }}
@@ -58,7 +54,7 @@ function ProjectCard({ project, imageUrl }) {
           style={{
             objectFit: "cover",
           }}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="300px"
         />
         <div
           style={{
@@ -68,7 +64,7 @@ function ProjectCard({ project, imageUrl }) {
             right: 0,
             bottom: 0,
             background:
-              "linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3))",
+              "linear-gradient(to right, rgba(0,0,0,0.1), rgba(0,0,0,0.3))",
           }}
         />
       </div>
@@ -78,72 +74,67 @@ function ProjectCard({ project, imageUrl }) {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "1rem",
+          gap: "0.75rem",
           flex: 1,
           padding: "1.5rem",
         }}
       >
-        <div
+        <h3
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.75rem",
-            flex: 1,
+            fontSize: "1.25rem",
+            fontWeight: 600,
+            color: "var(--foreground)",
+            margin: 0,
           }}
         >
-          <h3
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: 600,
-              color: "var(--foreground)",
-              margin: 0,
-            }}
-          >
-            {name}
-          </h3>
-          <p
-            style={{
-              fontSize: "0.875rem",
-              color: "var(--muted-foreground)",
-              lineHeight: "1.625",
-              flex: 1,
-              margin: 0,
-            }}
-          >
-            {description}
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-            {technologies.split(", ").map((tech, index) => (
-              <span
-                key={index}
-                style={{
-                  paddingLeft: "0.625rem",
-                  paddingRight: "0.625rem",
-                  paddingTop: "0.375rem",
-                  paddingBottom: "0.375rem",
-                  fontSize: "0.75rem",
-                  fontWeight: 500,
-                  borderRadius: "0.375rem",
-                  backgroundColor: "var(--muted-rgba-50)",
-                  color: "var(--muted-foreground)",
-                  border: "1px solid var(--border-rgba-30)",
-                }}
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
+          {name}
+        </h3>
+        <p
+          style={{
+            fontSize: "0.875rem",
+            color: "var(--muted-foreground)",
+            lineHeight: "1.625",
+            flex: 1,
+            margin: 0,
+          }}
+        >
+          {description}
+        </p>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+          {technologies.split(", ").map((tech, index) => (
+            <span
+              key={index}
+              style={{
+                paddingLeft: "0.625rem",
+                paddingRight: "0.625rem",
+                paddingTop: "0.375rem",
+                paddingBottom: "0.375rem",
+                fontSize: "0.75rem",
+                fontWeight: 500,
+                borderRadius: 0,
+                backgroundColor: "var(--muted)",
+                color: "var(--muted-foreground)",
+                border: "1px solid var(--border)",
+              }}
+            >
+              {tech}
+            </span>
+          ))}
         </div>
+      </div>
 
-        {/* Links Section */}
+      {/* Links Column */}
+      {(github || demo || youtube) && (
         <div
           style={{
+            width: "80px",
+            minWidth: "80px",
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
             gap: "1rem",
-            paddingTop: "1rem",
-            borderTop: "1px solid var(--border-rgba-30)",
-            flexWrap: "wrap",
+            padding: "1rem",
           }}
         >
           {github && (
@@ -154,22 +145,20 @@ function ProjectCard({ project, imageUrl }) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                color: "var(--muted-foreground)",
+                justifyContent: "center",
+                color: "var(--terminal-blue)",
                 transition: "color 0.2s",
                 textDecoration: "none",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = "var(--foreground)";
+                e.currentTarget.style.color = "var(--accent)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = "var(--muted-foreground)";
+                e.currentTarget.style.color = "var(--terminal-blue)";
               }}
+              title={t("social_github")}
             >
-              <Github style={{ width: "1rem", height: "1rem" }} />
-              <span>GitHub</span>
+              <Github style={{ width: "1.25rem", height: "1.25rem" }} />
             </Link>
           )}
           {demo && (
@@ -180,22 +169,20 @@ function ProjectCard({ project, imageUrl }) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                color: "var(--muted-foreground)",
+                justifyContent: "center",
+                color: "var(--terminal-blue)",
                 transition: "color 0.2s",
                 textDecoration: "none",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = "var(--foreground)";
+                e.currentTarget.style.color = "var(--accent)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = "var(--muted-foreground)";
+                e.currentTarget.style.color = "var(--terminal-blue)";
               }}
+              title={t("demo")}
             >
-              <ExternalLink style={{ width: "1rem", height: "1rem" }} />
-              <span>Demo</span>
+              <ExternalLink style={{ width: "1.25rem", height: "1.25rem" }} />
             </Link>
           )}
           {youtube && (
@@ -206,27 +193,24 @@ function ProjectCard({ project, imageUrl }) {
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: "0.5rem",
-                fontSize: "0.875rem",
-                fontWeight: 500,
-                color: "var(--muted-foreground)",
-                marginLeft: "auto",
+                justifyContent: "center",
+                color: "var(--terminal-blue)",
                 transition: "color 0.2s",
                 textDecoration: "none",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = "var(--foreground)";
+                e.currentTarget.style.color = "var(--accent)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = "var(--muted-foreground)";
+                e.currentTarget.style.color = "var(--terminal-blue)";
               }}
+              title={t("video")}
             >
-              <Youtube style={{ width: "1rem", height: "1rem" }} />
-              <span>Video</span>
+              <Youtube style={{ width: "1.25rem", height: "1.25rem" }} />
             </Link>
           )}
         </div>
-      </div>
+      )}
     </motion.div>
   );
 }

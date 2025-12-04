@@ -6,18 +6,21 @@ import { usePathname } from "next/navigation";
 import { motion, useScroll, useMotionValueEvent } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useRipple } from "@/lib/rippleContext";
-
-const navItems = [
-  { name: "About", href: "/" },
-  { name: "Projects", href: "#projects" },
-  { name: "Blog", href: "#blog" },
-];
+import { useLanguage } from "@/lib/languageContext";
 
 export default function Navigation() {
+  const { t } = useLanguage();
+  const navItems = [
+    { id: "about", name: t("about"), href: "/" },
+    { id: "projects", name: t("projects"), href: "#projects" },
+    { id: "blog", name: t("blog"), href: "#blog" },
+  ];
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [navDisplacement, setNavDisplacement] = useState(0);
   const [activeSection, setActiveSection] = useState("about");
+  const [isDesktop, setIsDesktop] = useState(false);
   const pathname = usePathname();
   const { scrollY } = useScroll();
   const { rippleState } = useRipple();
@@ -30,33 +33,127 @@ export default function Navigation() {
     minStartRadius = 70,
   } = rippleState;
   const navRef = useRef(null);
-  const sectionsRef = useRef({ projects: null, blog: null });
-  const lastScrollUpdateRef = useRef(0);
-  const throttleDelay = 100; // Throttle scroll updates to every 100ms
   const lastIsScrolledRef = useRef(false);
 
-  // Cache section elements
-  const updateSectionsCache = useCallback(() => {
-    if (pathname === "/") {
-      sectionsRef.current.projects = document.getElementById("projects");
-      sectionsRef.current.blog = document.getElementById("blog");
-    }
+  // Intersection Observer to update active section on scroll
+  useEffect(() => {
+    if (pathname !== "/") return; // Only run on home page
+
+    const sections = [
+      { id: "hero", navId: "about" },
+      { id: "projects", navId: "projects" },
+      { id: "blog", navId: "blog" },
+    ];
+
+    // Track intersection ratios for all sections
+    const sectionRatios = new Map();
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "-25% 0px -55% 0px", // Trigger when section is in upper-middle portion of viewport
+      threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1],
+    };
+
+    const observerCallback = (entries) => {
+      // Update ratios for all entries
+      entries.forEach((entry) => {
+        sectionRatios.set(entry.target.id, entry.intersectionRatio);
+      });
+
+      // Find the section with the highest intersection ratio
+      let maxRatio = 0;
+      let activeNavId = "about"; // Default to about
+
+      sections.forEach(({ id, navId }) => {
+        const ratio = sectionRatios.get(id) || 0;
+        if (ratio > maxRatio) {
+          maxRatio = ratio;
+          activeNavId = navId;
+        }
+      });
+
+      // Update active section
+      setActiveSection(activeNavId);
+    };
+
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions
+    );
+
+    // Observe all sections
+    sections.forEach(({ id }) => {
+      const element = document.getElementById(id);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    // Check initial scroll position after DOM is ready
+    const checkInitialSection = () => {
+      const scrollPosition = window.scrollY + 150; // Account for navbar and offset
+
+      // Check sections in reverse order (bottom to top) to find the first one we've scrolled past
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const { id, navId } = sections[i];
+        const element = document.getElementById(id);
+        if (element) {
+          const { offsetTop } = element;
+          if (scrollPosition >= offsetTop) {
+            setActiveSection(navId);
+            break;
+          }
+        }
+      }
+
+      // If we're at the very top, set to about
+      if (window.scrollY < 50) {
+        setActiveSection("about");
+      }
+    };
+
+    // Check after a short delay to ensure DOM is ready
+    const timeoutId = setTimeout(checkInitialSection, 200);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timeoutId);
+    };
   }, [pathname]);
 
-  // Memoized function to determine active section
-  const getActiveSection = useCallback((scrollPosition) => {
-    const { projects: projectsSection, blog: blogSection } =
-      sectionsRef.current;
+  // Handle responsive behavior
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsDesktop(window.matchMedia("(min-width: 768px)").matches);
+    };
 
-    if (blogSection && scrollPosition >= blogSection.offsetTop) {
-      return "blog";
-    } else if (projectsSection && scrollPosition >= projectsSection.offsetTop) {
-      return "projects";
+    // Check on mount
+    checkScreenSize();
+
+    // Listen for resize events
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+    const handleChange = (e) => {
+      setIsDesktop(e.matches);
+    };
+
+    // Modern browsers
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener("change", handleChange);
+    } else {
+      // Fallback for older browsers
+      mediaQuery.addListener(handleChange);
     }
-    return "about";
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener("change", handleChange);
+      } else {
+        mediaQuery.removeListener(handleChange);
+      }
+    };
   }, []);
 
-  // Initialize active section and scroll state on mount
+  // Initialize scroll state on mount
   useEffect(() => {
     // Initialize scroll state (deferred to avoid cascading renders)
     const initialScroll = window.scrollY;
@@ -66,52 +163,16 @@ export default function Navigation() {
     requestAnimationFrame(() => {
       setIsScrolled(initialIsScrolled);
     });
+  }, []);
 
-    if (pathname === "/") {
-      // Use setTimeout to defer state update and avoid cascading renders
-      setTimeout(() => {
-        updateSectionsCache();
-        const scrollPosition = window.scrollY + 150;
-        setActiveSection(getActiveSection(scrollPosition));
-      }, 0);
-    }
-  }, [pathname, updateSectionsCache, getActiveSection]);
-
-  // Throttled scroll handler
+  // Throttled scroll handler for navbar background opacity ONLY
   useMotionValueEvent(scrollY, "change", (latest) => {
-    const now = Date.now();
     const newIsScrolled = latest > 50;
 
     // Always update isScrolled immediately when crossing the threshold
-    // This ensures the navbar expands/collapses properly even during fast scrolling
     if (newIsScrolled !== lastIsScrolledRef.current) {
       setIsScrolled(newIsScrolled);
       lastIsScrolledRef.current = newIsScrolled;
-    }
-
-    // Throttle other scroll updates (active section, etc.)
-    if (now - lastScrollUpdateRef.current < throttleDelay) {
-      return;
-    }
-    lastScrollUpdateRef.current = now;
-
-    // Update active section based on scroll position
-    if (pathname === "/") {
-      // Update cache periodically (every 500ms) or on first call
-      if (!sectionsRef.current.projects || !sectionsRef.current.blog) {
-        updateSectionsCache();
-      }
-
-      const scrollPosition = latest + 150; // Add offset for navbar
-      const newActiveSection = getActiveSection(scrollPosition);
-
-      // Only update if changed to avoid unnecessary re-renders
-      setActiveSection((prev) => {
-        if (prev !== newActiveSection) {
-          return newActiveSection;
-        }
-        return prev;
-      });
     }
   });
 
@@ -282,125 +343,178 @@ export default function Navigation() {
 
   return (
     <>
-      {/* Desktop Navigation - Glass Morphism Container */}
+      {/* Desktop Navigation - Terminal Style */}
       <motion.nav
         ref={navRef}
         initial={{ y: -100, opacity: 0 }}
         animate={{
           y: navDisplacement,
           opacity: 1,
-          width: isScrolled ? "40%" : "90%",
-          top: isScrolled ? 16 : 16,
         }}
         transition={{
           y: { duration: 0.016, ease: "linear" },
           duration: 0.5,
-          width: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
-          top: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
         }}
-        className="fixed left-1/2 -translate-x-1/2 z-50 hidden md:block max-w-6xl"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          display: isDesktop ? "block" : "none",
+          borderBottom: "1px solid var(--border)",
+          backgroundColor: "var(--background)",
+        }}
       >
-        <motion.div
-          animate={{
-            paddingLeft: isScrolled ? "1.25rem" : "1.5rem",
-            paddingRight: isScrolled ? "1.25rem" : "1.5rem",
+        <div
+          style={{
+            width: "100%",
+            height: "3.5rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
           }}
-          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-          className={`
-            flex h-14 items-center justify-between
-            rounded-lg
-            bg-background/20 backdrop-blur-lg
-            border border-border/50
-            shadow-lg shadow-black/5
-            w-full
-          `}
         >
-          <Link
-            href="/"
-            className="text-lg font-semibold text-foreground hover:opacity-80 transition-opacity"
+          {/* Centered Content Container */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              width: "100%",
+              maxWidth: "60rem",
+              marginLeft: "auto",
+              marginRight: "auto",
+              paddingLeft: "1.5rem",
+              paddingRight: "1.5rem",
+            }}
           >
-            Ansh Kumar Tripathi
-          </Link>
-
-          {/* Desktop Navigation Items */}
-          <div className="flex items-center gap-6 lg:gap-8">
-            {navItems.map((item) => {
-              const isExternal = item.href.startsWith("http");
-              const isAnchor = item.href.startsWith("#");
-
-              // Determine if this item is active
-              let isActive = false;
-              if (isExternal) {
-                isActive = false; // External links are never active
-              } else if (isAnchor) {
-                // For anchor links, check activeSection state based on href
-                if (item.href === "#projects") {
-                  isActive = pathname === "/" && activeSection === "projects";
-                } else if (item.href === "#blog") {
-                  isActive = pathname === "/" && activeSection === "blog";
-                }
-              } else {
-                // For regular routes, check pathname match
-                isActive = pathname === item.href && activeSection === "about";
-              }
-
-              const handleClick = (e) => {
-                if (isAnchor) {
-                  e.preventDefault();
-                  const sectionName = item.href.replace("#", "");
-                  setActiveSection(sectionName);
-                  // Use cached section if available
-                  const element =
-                    sectionName === "projects"
-                      ? sectionsRef.current.projects
-                      : sectionName === "blog"
-                      ? sectionsRef.current.blog
-                      : document.querySelector(item.href);
-                  if (element) {
-                    const offsetTop = element.offsetTop - 100; // Account for navbar height
-                    window.scrollTo({
-                      top: offsetTop,
-                      behavior: "smooth",
-                    });
-                  }
-                } else if (item.href === "/" && pathname === "/") {
+            {/* Profile picture and name */}
+            <Link
+              href="/"
+              onClick={(e) => {
+                if (pathname === "/") {
                   e.preventDefault();
                   setActiveSection("about");
                   window.scrollTo({
                     top: 0,
                     behavior: "smooth",
                   });
+                } else {
+                  setActiveSection("about");
                 }
-              };
+              }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.75rem",
+                textDecoration: "none",
+                transition: "opacity 0.2s",
+              }}
+            >
+              {/* Profile Picture */}
+              <div
+                style={{
+                  width: "2rem",
+                  height: "2rem",
+                  borderRadius: "50%",
+                  backgroundColor: "var(--muted)",
+                  border: "1px solid var(--border)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "0.75rem",
+                  fontWeight: 600,
+                  color: "var(--foreground)",
+                  flexShrink: 0,
+                }}
+              >
+                AK
+              </div>
+              <span
+                style={{
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                  color: "var(--foreground)",
+                }}
+              >
+                ~/.ansh
+              </span>
+            </Link>
 
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={handleClick}
-                  target={isExternal ? "_blank" : undefined}
-                  rel={isExternal ? "noreferrer" : undefined}
-                  className="relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent rounded-full"
-                      transition={{
-                        type: "spring",
-                        stiffness: 380,
-                        damping: 30,
-                      }}
-                    />
-                  )}
-                  <span className={isActive ? "text-foreground" : ""}>
+            {/* Navigation Items */}
+            <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+              {navItems.map((item) => {
+                const isExternal = item.href.startsWith("http");
+                const isAnchor = item.href.startsWith("#");
+
+                // Determine if this item is active
+                let isActive = false;
+                if (isExternal) {
+                  isActive = false; // External links are never active
+                } else if (isAnchor) {
+                  // For anchor links, check activeSection state based on href
+                  if (item.href === "#projects") {
+                    isActive = pathname === "/" && activeSection === "projects";
+                  } else if (item.href === "#blog") {
+                    isActive = pathname === "/" && activeSection === "blog";
+                  }
+                } else {
+                  // For regular routes, check pathname match
+                  isActive =
+                    pathname === item.href && activeSection === "about";
+                }
+
+                const handleClick = (e) => {
+                  if (isAnchor) {
+                    e.preventDefault();
+                    const sectionName = item.href.replace("#", "");
+                    setActiveSection(sectionName);
+                    // Use cached section if available
+                    const element = document.querySelector(item.href);
+                    if (element) {
+                      const offsetTop = element.offsetTop - 100; // Account for navbar height
+                      window.scrollTo({
+                        top: offsetTop,
+                        behavior: "smooth",
+                      });
+                    }
+                  } else if (item.href === "/" && pathname === "/") {
+                    e.preventDefault();
+                    setActiveSection("about");
+                    window.scrollTo({
+                      top: 0,
+                      behavior: "smooth",
+                    });
+                  }
+                };
+
+                return (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    onClick={handleClick}
+                    target={isExternal ? "_blank" : undefined}
+                    rel={isExternal ? "noreferrer" : undefined}
+                    style={{
+                      fontSize: "0.875rem",
+                      fontWeight: 500,
+                      color: isActive
+                        ? "var(--foreground)"
+                        : "var(--muted-foreground)",
+                      textDecoration: "none",
+                      textTransform: "uppercase",
+                      transition: "color 0.2s",
+                    }}
+                  >
                     {item.name}
-                  </span>
-                </Link>
-              );
-            })}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
-        </motion.div>
+        </div>
       </motion.nav>
 
       {/* Mobile Navigation */}
@@ -411,27 +525,72 @@ export default function Navigation() {
           y: { duration: 0.016, ease: "linear" },
           duration: 0.5,
         }}
-        className="fixed top-0 left-0 right-0 z-50 md:hidden"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          display: isDesktop ? "none" : "block",
+          borderBottom: "1px solid var(--border)",
+          backgroundColor: "var(--background)",
+        }}
       >
         <div
-          className={`
-            flex h-16 items-center justify-between px-6
-            transition-all duration-300
-            ${
-              isScrolled
-                ? "bg-background/80 backdrop-blur-md border-b border-border"
-                : "bg-transparent"
-            }
-          `}
+          style={{
+            display: "flex",
+            height: "3.5rem",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingLeft: "1.5rem",
+            paddingRight: "1.5rem",
+          }}
         >
-          <Link href="/" className="text-xl font-semibold text-foreground">
-            Ansh Kumar Tripathi
+          <Link
+            href="/"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              textDecoration: "none",
+            }}
+          >
+            {/* Profile Picture */}
+            <div
+              style={{
+                width: "2rem",
+                height: "2rem",
+                borderRadius: "50%",
+                backgroundColor: "var(--muted)",
+                border: "1px solid var(--border)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                color: "var(--foreground)",
+                flexShrink: 0,
+              }}
+            >
+              AK
+            </div>
+            <span
+              style={{
+                fontSize: "0.875rem",
+                fontWeight: 500,
+                color: "var(--foreground)",
+              }}
+            >
+              ~/.ansh
+            </span>
           </Link>
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden"
+            style={{
+              display: isDesktop ? "none" : "block",
+            }}
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? (
@@ -451,9 +610,29 @@ export default function Navigation() {
           opacity: isMobileMenuOpen ? 1 : 0,
         }}
         transition={{ duration: 0.3 }}
-        className="fixed top-16 left-0 right-0 z-40 overflow-hidden bg-background/95 backdrop-blur-md border-b border-border md:hidden"
+        style={{
+          position: "fixed",
+          top: "3.5rem",
+          left: 0,
+          right: 0,
+          zIndex: 40,
+          overflow: "hidden",
+          backgroundColor: "var(--background)",
+          borderBottom: "1px solid var(--border)",
+          display: isDesktop ? "none" : "block",
+        }}
       >
-        <div className="flex flex-col gap-4 px-6 py-4">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+            paddingLeft: "1.5rem",
+            paddingRight: "1.5rem",
+            paddingTop: "1rem",
+            paddingBottom: "1rem",
+          }}
+        >
           {navItems.map((item) => {
             const isExternal = item.href.startsWith("http");
             const isAnchor = item.href.startsWith("#");
@@ -500,16 +679,22 @@ export default function Navigation() {
 
             return (
               <Link
-                key={item.name}
+                key={item.id}
                 href={item.href}
                 target={isExternal ? "_blank" : undefined}
                 rel={isExternal ? "noreferrer" : undefined}
                 onClick={handleClick}
-                className={`text-base font-medium transition-colors ${
-                  isActive
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
+                style={{
+                  fontSize: "0.875rem",
+                  fontWeight: 500,
+                  color: isActive
+                    ? "var(--foreground)"
+                    : "var(--muted-foreground)",
+                  textDecoration: "none",
+                  textTransform: "uppercase",
+                  transition: "color 0.2s",
+                }}
+                className="hover:text-foreground"
               >
                 {item.name}
               </Link>
