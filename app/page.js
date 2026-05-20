@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import Hero from "@/components/Hero";
 import MakerVideo from "@/components/MakerVideo";
+import ExperienceSection from "@/components/ExperienceSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import BlogSectionClient from "@/components/BlogSectionClient";
 import { fetchPopularBlogs } from "@/lib/blog";
@@ -30,6 +31,9 @@ export default async function Home() {
       >
         <Hero />
       </section>
+
+      {/* Experience Section */}
+      <ExperienceSection />
 
       {/* Featured Projects Section - Full Viewport Height */}
       <ProjectsSection />

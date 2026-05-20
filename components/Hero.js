@@ -21,7 +21,7 @@ export default function Hero() {
     ...socials,
     {
       label: "RESUME",
-      href: "/Ansh%20Kumar%20Tripathi%20-%20Resume.pdf",
+      href: "/resume.pdf",
       isDownload: true,
     },
   ];

@@ -12,6 +12,7 @@ export default function Navigation() {
   const { t } = useLanguage();
   const navItems = [
     { id: "about", name: t("about"), href: "/" },
+    { id: "experience", name: t("experience"), href: "#experience" },
     { id: "projects", name: t("projects"), href: "#projects" },
     { id: "blog", name: t("blog"), href: "#blog" },
   ];
@@ -41,6 +42,7 @@ export default function Navigation() {
 
     const sections = [
       { id: "hero", navId: "about" },
+      { id: "experience", navId: "experience" },
       { id: "projects", navId: "projects" },
       { id: "blog", navId: "blog" },
     ];
@@ -454,12 +456,7 @@ export default function Navigation() {
                 if (isExternal) {
                   isActive = false; // External links are never active
                 } else if (isAnchor) {
-                  // For anchor links, check activeSection state based on href
-                  if (item.href === "#projects") {
-                    isActive = pathname === "/" && activeSection === "projects";
-                  } else if (item.href === "#blog") {
-                    isActive = pathname === "/" && activeSection === "blog";
-                  }
+                  isActive = pathname === "/" && activeSection === item.id;
                 } else {
                   // For regular routes, check pathname match
                   isActive =
@@ -642,12 +639,7 @@ export default function Navigation() {
             if (isExternal) {
               isActive = false; // External links are never active
             } else if (isAnchor) {
-              // For anchor links, check activeSection state based on href
-              if (item.href === "#projects") {
-                isActive = pathname === "/" && activeSection === "projects";
-              } else if (item.href === "#blog") {
-                isActive = pathname === "/" && activeSection === "blog";
-              }
+              isActive = pathname === "/" && activeSection === item.id;
             } else {
               // For regular routes, check pathname match
               isActive = pathname === item.href && activeSection === "about";
