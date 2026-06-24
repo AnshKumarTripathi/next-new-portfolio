@@ -10,12 +10,12 @@ export default function ProjectsSection() {
   // Project data with translation keys
   const featuredProjects = [
     {
-      name: t("project_resumespace_name"),
-      description: t("project_resumespace_desc"),
-      technologies: "TypeScript, HTML, CSS, JavaScript, React",
-      demo: "https://www.resume-builder.space/",
-      youtube: "https://youtu.be/2SzDcSlD3Cg",
-      imageUrl: "/Images/resume-space.png",
+      name: t("project_docsuite_name"),
+      description: t("project_docsuite_desc"),
+      technologies:
+        "Next.js, React, Tailwind CSS, DaisyUI, NextAuth, MongoDB, Google Gemini, PDF Processing",
+      demo: "https://productivty-tool.vercel.app/",
+      imageUrl: "/Images/docusuite.png",
     },
     {
       name: t("project_docusplit_name"),
